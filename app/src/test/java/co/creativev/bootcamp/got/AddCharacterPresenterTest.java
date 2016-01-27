@@ -7,9 +7,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -18,12 +22,26 @@ public class AddCharacterPresenterTest {
     @Mock
     AddCharacterView addCharacterView;
     @Mock
-    Context context;
+    AddCharacterService addCharacterService;
     private AddCharacterPresenter addCharacterPresenter;
 
     @Before
     public void setUp() throws Exception {
-        addCharacterPresenter = new AddCharacterPresenter(context, addCharacterView);
+        addCharacterPresenter = new AddCharacterPresenter(addCharacterView, addCharacterService);
+    }
+
+    @Test
+    public void testAddsCharacterToDatabase() {
+        doReturn((long) 1).when(addCharacterService).insertInDb(R.drawable.baratheon, "Stark", "file://home");
+        addCharacterPresenter.addCharacter(R.id.radio_baratheon, "Stark", "file://home");
+        verify(addCharacterView).closeActivity();
+    }
+
+    @Test
+    public void testDoesNotAddCharacterOnDatabaseError() {
+        doReturn((long) -1).when(addCharacterService).insertInDb(R.drawable.baratheon, "Stark", "file://home");
+        addCharacterPresenter.addCharacter(R.id.radio_baratheon, "Stark", "file://home");
+        verify(addCharacterView).onDbError();
     }
 
     @Test

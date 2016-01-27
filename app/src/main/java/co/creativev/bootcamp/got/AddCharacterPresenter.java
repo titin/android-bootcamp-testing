@@ -1,14 +1,11 @@
 package co.creativev.bootcamp.got;
 
-import android.content.Context;
-
 public class AddCharacterPresenter {
+    private final AddCharacterService addCharacterService;
+    private final AddCharacterView addCharacterView;
 
-    private final Context context;
-    AddCharacterView addCharacterView;
-
-    public AddCharacterPresenter(Context context, AddCharacterView addCharacterView) {
-        this.context = context;
+    public AddCharacterPresenter(AddCharacterView addCharacterView, AddCharacterService addCharacterService) {
+        this.addCharacterService = addCharacterService;
         this.addCharacterView = addCharacterView;
     }
 
@@ -24,25 +21,12 @@ public class AddCharacterPresenter {
         if (!validateCharacter(selectedHouse, name, imagePath))
             return;
 
-        long id = insertInDb(getHouseResId(selectedHouse), name, imagePath);
+        long id = addCharacterService.insertInDb(getHouseResId(selectedHouse), name, imagePath);
         if (id == -1) {
             addCharacterView.onDbError();
         } else {
             addCharacterView.closeActivity();
         }
-    }
-
-    private long insertInDb(int houseResId, String name, String imagePath) {
-        DatabaseHelper databaseHelper = DatabaseHelper.getDatabaseHelper(context);
-        String[] names = name.split(" ");
-        String firstName = names[0];
-        String lastName;
-        if (names.length > 1) {
-            lastName = name.substring(name.indexOf(" "));
-        } else {
-            lastName = "Unknown";
-        }
-        return databaseHelper.insert(new GoTCharacter(firstName, lastName, imagePath, true, "New", houseResId, "Lorem", imagePath));
     }
 
     public boolean validateCharacter(int selectedHouse, String name, String imagePath) {

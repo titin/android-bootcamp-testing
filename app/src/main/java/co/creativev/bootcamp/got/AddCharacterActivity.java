@@ -28,7 +28,9 @@ public class AddCharacterActivity extends AppCompatActivity implements AddCharac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addCharacterPresenter = new AddCharacterPresenter(this, this);
+        addCharacterPresenter = new AddCharacterPresenter(this,
+                new AddCharacterService(
+                        DatabaseHelper.getDatabaseHelper(this)));
         addCharacterPresenter.initView();
     }
 
