@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(GotViewHolder holder, int position) {
-            holder.bindItem(context, getItem(position));
+            holder.bindItem(context, new GoTCharacterViewModel(getItem(position)));
         }
 
         @Override
@@ -137,18 +137,18 @@ public class MainActivity extends AppCompatActivity {
             this.image = image;
         }
 
-        public void bindItem(final Context context, final GoTCharacter gotCharacter) {
+        public void bindItem(final Context context, final GoTCharacterViewModel gotCharacterViewModel) {
             this.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, DetailActivity.class);
-                    intent.putExtra(DetailActivity.EXTRA_CHARACTER, gotCharacter);
+                    intent.putExtra(DetailActivity.EXTRA_CHARACTER, gotCharacterViewModel.gotCharacter);
                     context.startActivity(intent);
                 }
             });
-            this.name.setText(gotCharacter.name());
+            this.name.setText(gotCharacterViewModel.name());
             Picasso.with(context)
-                    .load(Uri.parse(gotCharacter.thumbUrl))
+                    .load(Uri.parse(gotCharacterViewModel.thumbUrl()))
                     .placeholder(R.drawable.profile_placeholder)
                     .error(R.drawable.profile_placeholder_error)
                     .into(this.image);

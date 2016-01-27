@@ -1,6 +1,5 @@
 package co.creativev.bootcamp.got;
 
-import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.BaseColumns;
@@ -81,17 +80,4 @@ public class GoTCharacter implements Parcelable, BaseColumns {
             return new GoTCharacter[size];
         }
     };
-
-    public String name() {
-        return firstName + " " + lastName;
-    }
-
-    public int color() {
-        int color;
-        if (alive)
-            color = Color.GREEN;
-        else
-            color = Color.RED;
-        return color;
-    }
 }
