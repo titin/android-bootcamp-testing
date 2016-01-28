@@ -4,15 +4,15 @@ import javax.inject.Inject;
 
 public class AddCharacterPresenter {
     @Inject
-    AddCharacterService addCharacterService;
+    DatabaseService databaseService;
     private final AddCharacterView addCharacterView;
 
     public AddCharacterPresenter(AddCharacterView addCharacterView) {
         this.addCharacterView = addCharacterView;
     }
 
-    public void setAddCharacterService(AddCharacterService addCharacterService) {
-        this.addCharacterService = addCharacterService;
+    public void setDatabaseService(DatabaseService databaseService) {
+        this.databaseService = databaseService;
     }
 
     public void initView() {
@@ -27,7 +27,7 @@ public class AddCharacterPresenter {
         if (!validateCharacter(selectedHouse, name, imagePath))
             return;
 
-        long id = addCharacterService.insertInDb(getHouseResId(selectedHouse), name, imagePath);
+        long id = databaseService.insertInDb(getHouseResId(selectedHouse), name, imagePath);
         if (id == -1) {
             addCharacterView.onDbError();
         } else {

@@ -1,9 +1,9 @@
 package co.creativev.bootcamp.got;
 
-public class AddCharacterService {
+public class DatabaseService {
     private final DatabaseHelper databaseHelper;
 
-    public AddCharacterService(DatabaseHelper databaseHelper) {
+    public DatabaseService(DatabaseHelper databaseHelper) {
         this.databaseHelper = databaseHelper;
     }
 
@@ -17,5 +17,17 @@ public class AddCharacterService {
             lastName = "Unknown";
         }
         return databaseHelper.insert(new GoTCharacter(firstName, lastName, imagePath, true, "New", houseResId, "Lorem", imagePath));
+    }
+
+    public int count() {
+        return databaseHelper.getCount();
+    }
+
+    public GoTCharacter getGoTCharacter(long id) {
+        return databaseHelper.getCharacter(id);
+    }
+
+    public void reset() {
+        databaseHelper.reset();
     }
 }

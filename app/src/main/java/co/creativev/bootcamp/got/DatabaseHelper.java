@@ -58,7 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        db.beginTransaction();
+        db.beginTransaction();
         db.execSQL("CREATE TABLE " + GOT_TABLE + "(" +
                 GoTCharacter._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 GoTCharacter.FIRST_NAME + " TEXT," +
@@ -73,9 +73,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             for (GoTCharacter gotCharacter : GOT_CHARACTERS) {
                 insertCharacter(db, gotCharacter);
             }
-//            db.setTransactionSuccessful();
+            db.setTransactionSuccessful();
         } finally {
-//            db.endTransaction();
+            db.endTransaction();
         }
     }
 
@@ -108,5 +108,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(GoTCharacter.HOUSE_RES_ID, gotCharacter.houseResId);
         values.put(GoTCharacter.DESCRIPTION, gotCharacter.description);
         return db.insert(GOT_TABLE, null, values);
+    }
+
+    public GoTCharacter getCharacter(long id) {
+        Cursor cursor = null;
+        try {
+            cursor = getReadableDatabase().query(GOT_TABLE, GoTCharacter.ALL_COLS, GoTCharacter._ID + "=?", new String[]{String.valueOf(id)}, null, null, null, "1");
+            if (cursor.moveToNext()) {
+                GoTCharacter result = new GoTCharacter(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(GoTCharacter._ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(GoTCharacter.FIRST_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(GoTCharacter.LAST_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(GoTCharacter.THUMB_URL)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(GoTCharacter.FULL_URL)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(GoTCharacter.ALIVE)) == 1,
+                        cursor.getString(cursor.getColumnIndexOrThrow(GoTCharacter.HOUSE)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(GoTCharacter.HOUSE_RES_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(GoTCharacter.DESCRIPTION))
+                );
+                return result;
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return null;
+    }
+
+    public void reset() {
+        onUpgrade(getWritableDatabase(), 0, VERSION);
     }
 }
