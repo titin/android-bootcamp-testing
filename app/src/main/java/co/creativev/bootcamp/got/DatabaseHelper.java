@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String GOT_TABLE = "got_characters";
     private static DatabaseHelper instance;
 
-    private DatabaseHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, GOT_DB, null, VERSION);
     }
 

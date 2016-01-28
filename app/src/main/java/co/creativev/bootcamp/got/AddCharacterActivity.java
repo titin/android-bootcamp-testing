@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,9 +27,8 @@ public class AddCharacterActivity extends AppCompatActivity implements AddCharac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addCharacterPresenter = new AddCharacterPresenter(this,
-                new AddCharacterService(
-                        DatabaseHelper.getDatabaseHelper(this)));
+        addCharacterPresenter = new AddCharacterPresenter(this);
+        ((GoTApplication) getApplication()).getGoTDeps().inject(addCharacterPresenter);
         addCharacterPresenter.initView();
     }
 

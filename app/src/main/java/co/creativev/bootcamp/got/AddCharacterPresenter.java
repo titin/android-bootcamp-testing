@@ -1,12 +1,18 @@
 package co.creativev.bootcamp.got;
 
+import javax.inject.Inject;
+
 public class AddCharacterPresenter {
-    private final AddCharacterService addCharacterService;
+    @Inject
+    AddCharacterService addCharacterService;
     private final AddCharacterView addCharacterView;
 
-    public AddCharacterPresenter(AddCharacterView addCharacterView, AddCharacterService addCharacterService) {
-        this.addCharacterService = addCharacterService;
+    public AddCharacterPresenter(AddCharacterView addCharacterView) {
         this.addCharacterView = addCharacterView;
+    }
+
+    public void setAddCharacterService(AddCharacterService addCharacterService) {
+        this.addCharacterService = addCharacterService;
     }
 
     public void initView() {
