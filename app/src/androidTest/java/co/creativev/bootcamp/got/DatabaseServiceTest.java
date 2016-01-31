@@ -26,6 +26,7 @@ public class DatabaseServiceTest {
                 .build()
                 .inject(presenter);
         databaseService = presenter.databaseService;
+        databaseService.reset();
     }
 
     @Test
@@ -36,10 +37,5 @@ public class DatabaseServiceTest {
         assertThat(databaseService.count(), is(29));
         GoTCharacter goTCharacter = databaseService.getGoTCharacter(id);
         assertThat(goTCharacter, is(new GoTCharacter(((int) id), name, "Unknown", image, image, true, "New", R.id.radio_stark, "Lorem")));
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        databaseService.reset();
     }
 }

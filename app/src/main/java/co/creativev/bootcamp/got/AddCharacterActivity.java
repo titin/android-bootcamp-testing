@@ -92,8 +92,17 @@ public class AddCharacterActivity extends AppCompatActivity implements AddCharac
 
     @Override
     public void closeActivity() {
-        Toast.makeText(AddCharacterActivity.this, "Inserted new character", Toast.LENGTH_SHORT).show();
-        finish();
+        new AlertDialog.Builder(this)
+                .setMessage("Inserted new character")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                })
+                .show();
+//        Toast.makeText(AddCharacterActivity.this, "Inserted new character", Toast.LENGTH_SHORT).show();
+//        finish();
     }
 
     @Override
