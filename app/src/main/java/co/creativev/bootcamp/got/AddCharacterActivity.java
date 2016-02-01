@@ -16,10 +16,13 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-public class AddCharacterActivity extends AppCompatActivity {
+public class AddCharacterActivity extends AppCompatActivity implements AddCharacterView {
 
     public static final int CHOOSE_IMAGE = 100;
     private ImageView imageView;
+
+    AddCharacterPresenter addCharacterPresenter;
+    private EditText inputCharacter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,10 @@ public class AddCharacterActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         setTitle("Add GoT Character");
+
+        addCharacterPresenter = new AddCharacterPresenter(this, DatabaseHelper.getDatabaseHelper(this));
+
+        inputCharacter = (EditText) findViewById(R.id.text_character_name);
         imageView = (ImageView) findViewById(R.id.image_character);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,76 +52,44 @@ public class AddCharacterActivity extends AppCompatActivity {
         findViewById(R.id.button_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText inputCharacter = (EditText) findViewById(R.id.text_character_name);
                 String name = inputCharacter.getText().toString();
-                if (name.isEmpty()) {
-                    inputCharacter.setError("Cannot be empty");
-                    return;
-                }
                 String imagePath = (String) imageView.getTag();
-                if (imagePath == null) {
-                    new AlertDialog.Builder(AddCharacterActivity.this)
-                            .setTitle("Error")
-                            .setMessage("Image is not selected")
-                            .setCancelable(true)
-                            .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
-                    return;
-                }
                 int selectedHouse = radioGroupHouse.getCheckedRadioButtonId();
-                if (selectedHouse == -1) {
-                    new AlertDialog.Builder(AddCharacterActivity.this)
-                            .setTitle("Error")
-                            .setMessage("House is not selected")
-                            .setCancelable(true)
-                            .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
-                    return;
-                }
-                int houseResId = getHouseResId(selectedHouse);
-                DatabaseHelper databaseHelper = DatabaseHelper.getDatabaseHelper(AddCharacterActivity.this);
-                String[] names = name.split(" ");
-                String firstName = names[0];
-                String lastName;
-                if (names.length > 1) {
-                    lastName = name.substring(name.indexOf(" "));
-                } else {
-                    lastName = "Unknown";
-                }
-                long id = databaseHelper.insert(new GoTCharacter(firstName, lastName, imagePath, true, "New", houseResId, "Lorem", imagePath));
-                if (id == -1) {
-                    Log.e(MainActivity.LOG_TAG, "Error while inserting data");
-                } else {
-                    Toast.makeText(AddCharacterActivity.this, "Inserted new character", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+
+                addCharacterPresenter.addCharacter(name, imagePath, selectedHouse);
             }
         });
     }
 
-    public int getHouseResId(int radioButtonId) {
-        switch (radioButtonId) {
-            case R.id.radio_baratheon:
-                return R.drawable.baratheon;
-            case R.id.radio_lannister:
-                return R.drawable.lannister;
-            case R.id.radio_stark:
-                return R.drawable.stark;
-            case R.id.radio_targaryen:
-                return R.drawable.targaryen;
-            default:
-                throw new IllegalArgumentException("No icon found for radio button " + radioButtonId);
-        }
+    @Override
+    public void addCharacterSuccess() {
+        Toast.makeText(AddCharacterActivity.this, "Inserted new character", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    public void showDbInsertError() {
+        Log.e(MainActivity.LOG_TAG, "Error while inserting data");
+    }
+
+    @Override
+    public void setError(String message) {
+        inputCharacter.setError(message);
+    }
+
+    @Override
+    public void showAlertMessage(String message) {
+        new AlertDialog.Builder(AddCharacterActivity.this)
+                .setTitle("Error")
+                .setMessage(message)
+                .setCancelable(true)
+                .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     @Override
