@@ -10,12 +10,4 @@ public class CurrencyConverter {
         }
     }
 
-    public int currencyConverter2(int amount2, String inr) {
-        return 400;
-    }
-
-    public int currencyConverter1(int amount, String inr) {
-        return 200;
-    }
-
 }

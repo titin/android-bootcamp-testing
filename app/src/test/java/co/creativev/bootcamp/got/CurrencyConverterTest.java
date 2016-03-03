@@ -9,31 +9,24 @@ import static org.junit.Assert.assertEquals;
 public class CurrencyConverterTest {
 
     @Test
-    public void convert1IDRto200INR() throws IOException{
+    public void convert1INRto200IDR() throws IOException{
         CurrencyConverter currencyConverter = new CurrencyConverter();
-        int amountCurrency = currencyConverter.currencyConverter1(1,"INR");
+        int amountCurrency = currencyConverter.currencyConverter(1, "INR");
         assertEquals(200,amountCurrency);
     }
 
     @Test
-    public void convert2IDRto400INR() throws IOException{
-        CurrencyConverter currencyConverter = new CurrencyConverter();
-        int amountCurrency = currencyConverter.currencyConverter2(2, "INR");
-        assertEquals(400,amountCurrency);
-    }
-
-    @Test
-    public void convertIDRtoINR() throws IOException{
+    public void convert2INRto400IDR() throws IOException{
         CurrencyConverter currencyConverter = new CurrencyConverter();
         int amountCurrency = currencyConverter.currencyConverter(2, "INR");
         assertEquals(400,amountCurrency);
     }
 
     @Test
-    public void convertINRtoIDR() throws IOException{
+    public void convert200IDRto1INR() throws IOException{
         CurrencyConverter currencyConverter = new CurrencyConverter();
-        int amountCurrency = currencyConverter.currencyConverter(1, "IDR");
-        assertEquals(400,amountCurrency);
+        int amountCurrency = currencyConverter.currencyConverter(200, "IDR");
+        assertEquals(1,amountCurrency);
     }
 
 
