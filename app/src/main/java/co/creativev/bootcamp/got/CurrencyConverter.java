@@ -3,7 +3,11 @@ package co.creativev.bootcamp.got;
 
 public class CurrencyConverter {
     public int currencyConverter(int amount, String s) {
-        return amount*200;
+        if (s.equals("INR")){
+            return amount*200;
+        } else {
+            return amount/200;
+        }
     }
 
     public int currencyConverter2(int amount2, String inr) {
@@ -14,7 +18,4 @@ public class CurrencyConverter {
         return 200;
     }
 
-    public int currencyConverterINRtoIDR(int amount, String idr) {
-        return amount/200;
-    }
 }

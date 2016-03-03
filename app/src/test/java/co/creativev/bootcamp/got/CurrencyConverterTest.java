@@ -32,7 +32,7 @@ public class CurrencyConverterTest {
     @Test
     public void convertINRtoIDR() throws IOException{
         CurrencyConverter currencyConverter = new CurrencyConverter();
-        int amountCurrency = currencyConverter.currencyConverterINRtoIDR(1, "IDR");
+        int amountCurrency = currencyConverter.currencyConverter(1, "IDR");
         assertEquals(400,amountCurrency);
     }
 
